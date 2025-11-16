@@ -8,7 +8,7 @@ and repeats until you press Ctrl+C.
 
 import time
 import sys
-from gpiod_TM1638 import TMBoards
+from RPi5_TM1638 import TMBoards
 
 # --- Configuration ---
 # DIO and CLK are shared (wired in parallel) to all boards
