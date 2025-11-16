@@ -8,8 +8,8 @@ and displays them on the first 6 segments (0-5) of the first board.
 
 import time
 import sys
-from gpiod_TM1638 import TMBoards
-from gpiod_TM1638.Font import FONT  # Import the font dictionary
+from RPi5_TM1638 import TMBoards
+from RPi5_TM1638.Font import FONT  # Import the font dictionary
 
 # --- Configuration ---
 # Your proven hardware setup
