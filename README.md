@@ -4,6 +4,20 @@ This is a Python 3 library for controlling TM1638-based LED and key modules on a
 
 This library was ported from the original `rpi-TM1638` (which used the deprecated `RPi.GPIO`) and extensively debugged to solve complex timing and API issues specific to the new `gpiod` v2 interface.
 
+# Raspberry Pi 5 TM1638 Library (gpiod)
+
+This is a Python 3 library for controlling TM1638-based LED and key modules on a **Raspberry Pi 5** or any other system using the modern `gpiod` v2 library.
+
+## Attribution and License
+
+This library is a port of the original **`rpi-TM1638`** library by **thilaire** ([github.com/thilaire/rpi-TM1638](https://github.com/thilaire/rpi-TM1638)).
+
+The original library was built for the deprecated `RPi.GPIO`. This version has been heavily modified and ported to use the modern `gpiod` v2 API for compatibility with the Raspberry Pi 5.
+
+This derivative work is, like the original, licensed under the **GNU General Public License v3.0**.
+
+---
+
 ## Features
 
 * Full support for chained TM1638 boards.
