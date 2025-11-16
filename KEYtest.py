@@ -8,7 +8,7 @@ from the working RPi4 switchtest.py.
 
 import time
 import sys
-from gpiod_TM1638 import TMBoards
+from RPi5_TM1638 import TMBoards
 
 # --- Configuration ---
 DIO = 19
