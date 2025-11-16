@@ -7,7 +7,7 @@ This will cycle through Green, Red, and Amber/Yellow.
 
 import time
 import sys
-from gpiod_TM1638 import TMBoards
+from RPi5_TM1638 import TMBoards
 
 # --- Configuration ---
 # We still need to define all 3 boards so the
