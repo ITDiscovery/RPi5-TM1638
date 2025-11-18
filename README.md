@@ -131,34 +131,36 @@ To control bi-color LEDs, use `tm.sendData()`:
 tm.sendData(5, 2, 0)
 ```
 
-### ⚠️ Important: Reading Keys
+### ⌨️ Reading Keys (Stabilized Method)
+Important: The standard TM1638 key reading process is prone to race conditions due to the high speed of the Linux gpiod library and the required pin stabilization time.
 
-Due to a timing quirk in the TM1638 and the high speed of the `gpiod` library, you **must** use a specific sequence to read keys without causing bus conflicts.
+The original tm.getData() function is "dumb" and only reads bytes; it cannot perform the full transaction.
 
-The `tm.getData()` function is "dumb" and only reads bytes. You must manually send the "Read Key" command first.
+You MUST use the dedicated tm.read_keys_raw() method to ensure correct timing and data integrity.
 
-**Correct Way to Read Keys:**
+Recommended Usage (The Stabilized Fix)
+To get raw key data for Board 0:
 
 ```python
-# A 50ms delay is CRITICAL to prevent bus contention
-time.sleep(0.05) 
+import time
 
-# 1. Pull STB low for the specific board
-tm._setStb(False, 0) # 0 = Board Index
+# 1. Use the read_keys_raw method. 
+#    This method internally handles the full sequence:
+#    (STB Low -> Send 0x42 -> Wait 1ms -> Read Data -> STB High)
+key_bytes = tm.read_keys_raw(0) 
 
-# 2. Send the "Read Key" command (0x42)
-tm._setDataMode(0x02, 0x00) # READ_MODE, INCR_ADDR
+# 2. Decode the raw bytes against your local keymap
+if key_bytes == [4, 0, 0, 0]:
+    print("Key 'ENTER' pressed.")
 
-# 3. Call the "dumb" getData function
-key_data = tm.getData(0) # 0 = Board Index
-
-# 4. Pull STB high again
-tm._setStb(True, 0)
-
-# key_data is now [byte1, byte2, byte3, byte4]
-if key_data != [0, 0, 0, 0]:
-    print(f"Key data from board 0: {key_data}")
 ```
+Technical Detail (Why the Old Way Failed)
+The original logic of calling tm.sendCommand(0x42) followed by tm.getData() fails for two reasons:
+
+Premature STB Toggle: The tm.sendCommand() method immediately raises the STB line (chip select) after sending the 0x42 command, which prematurely terminates the chip's key reading transaction.
+
+DIO Pin Stabilization: The switch of the DIO pin from output (for the command) to input (for the read) requires a stabilization period. The read_keys_raw method enforces a necessary 1 millisecond delay to ensure the data read is valid (the hardware fix).
+
 See `examples/test_keys.py` for a full implementation.
 
 ## License
